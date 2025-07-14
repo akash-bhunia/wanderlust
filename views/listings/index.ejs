@@ -1,0 +1,131 @@
+<% layout("/layouts/boilerplate.ejs") %>
+<body>
+    <!-- <h3>All Listings</h3> -->
+    <!-- <form method="get" action="/listings/new">
+        <button>Create New Listing</button>
+    </form> -->
+
+    <style>
+        .filters{
+            display: flex ;
+            flex-wrap: wrap ;
+            align-items: center; 
+        }
+        .filter{
+            text-align: center;
+            margin-right: 2rem;
+            margin-top: 2rem;
+            opacity: 0.7;
+        }
+        .filter:hover{
+            opacity: 1;
+            cursor: pointer;
+        }
+
+        .filter p {
+            font-size: 0.8rem;
+        }
+
+        .tax-info{
+            display: none;
+        }
+
+        .tax-toggle{
+            border: 1px solid black;
+            height: 3rem;
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border-radius:1rem;
+            margin-left: 3rem;
+        }
+        #filterContainer {
+            transition: max-height 0.3s ease;
+        }
+</style>
+
+<!-- Toggle Button for Mobile -->
+<button id="filterToggleBtn" class="btn btn-dark d-md-none mb-2 ms-3">
+    Show Filters
+</button>
+
+<!-- Filters Container -->
+<div id="filterContainer" class="filters d-none d-md-flex">
+    <div class="filter"><i class="fa-solid fa-fire"></i><p>Trending</p></div>
+    <div class="filter"><i class="fa-solid fa-bed"></i><p>Rooms</p></div>
+    <div class="filter"><i class="fa-solid fa-snowflake"></i><p>Arctic</p></div>
+    <div class="filter"><i class="fa-solid fa-cow"></i><p>Farms</p></div>
+    <div class="filter"><i class="fa-solid fa-person-swimming"></i><p>Amazing pools</p></div>
+    <div class="filter"><i class="fa-solid fa-umbrella-beach"></i><p>Beach</p></div>
+    <div class="filter"><i class="fa-solid fa-tent"></i><p>Camping</p></div>
+    <div class="filter"><i class="fa-solid fa-mountain-sun"></i><p>Moutain</p></div>
+    <div class="filter"><i class="fa-solid fa-mountain-city"></i><p>Mountain-city</p></div>
+    <div class="filter"><i class="fa-solid fa-snowflake"></i><p>Arctic</p></div>
+
+    <!-- Tax Toggle -->
+    <div class="tax-toggle">
+        <div class="form-check-reverse form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
+            <label class="form-check-label" for="switchCheckDefault">Display Taxes</label>
+        </div>
+    </div>
+</div>
+
+
+
+    <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
+        <% for(let listing of allListings){ %>
+            <a href="/listings/<%= listing._id %>" class="listing-link">
+                <div class="card">
+                    <img src="<%= listing.image.url %>" class="card-img-top" alt="listings_image" style="height: 20rem;">
+                    <div class="card-img-overlay">&hearts;</div>
+                    <div class="card-body">
+                        <p class="card-text">
+                            <b><%= listing.title %></b><br>
+                            <% if (listing.price !== null && listing.price !== undefined) { %>
+                                &#8377; <%= listing.price.toLocaleString("en-IN") %> / night
+                                <i class="tax-info"> &nbsp; &nbsp; +18% GST</i>
+                            <% } else { %>
+                                <span class="text-muted">Price not available</span>
+                            <% } %>
+                        </p>
+                    </div>
+                </div>
+            </a>
+        <% } %>     
+    </div>
+    
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const toggleBtn = document.getElementById("filterToggleBtn");
+        const filterContainer = document.getElementById("filterContainer");
+        const taxSwitch = document.getElementById("switchCheckDefault");
+
+        // Filter toggle logic
+        toggleBtn.addEventListener("click", function () {
+            const isHidden = filterContainer.classList.contains("d-none");
+
+            if (isHidden) {
+                filterContainer.classList.remove("d-none");
+                filterContainer.classList.add("d-flex");
+                toggleBtn.textContent = "Hide Filters";
+            } else {
+                filterContainer.classList.remove("d-flex");
+                filterContainer.classList.add("d-none");
+                toggleBtn.textContent = "Show Filters";
+            }
+        });
+
+        // Tax label toggle logic
+        if (taxSwitch) {
+            taxSwitch.addEventListener("click", function () {
+                const taxLabels = document.querySelectorAll(".tax-info");
+                taxLabels.forEach(function (el) {
+                    el.style.display = (el.style.display === "inline") ? "none" : "inline";
+                });
+            });
+        }
+    });
+</script>
+
+</body>
