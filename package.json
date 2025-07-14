@@ -1,8 +1,10 @@
 {
   "engines": {
-    "node": "22.24.0"
+    "node": "22.14.0"
   },
-    "start": "node app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
   "dependencies": {
     "cloudinary": "^1.21.0",
     "connect-flash": "^0.1.1",
